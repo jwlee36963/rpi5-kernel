@@ -10,3 +10,10 @@ config SND_RP1_AUDIO_OUT
 	 Output is from RP1 GPIOs pins 12 and 13 only, and additional
 	 components will be needed. It may be useful when HDMI, I2S
 	 or USB audio devices are unavailable, or for compatibility.
+
+config SND_SOC_MACHINE_WM8960
+	tristate "ASoC Machine Driver for RaspberryPi WM8960"
+	select SND_SOC_WM8960
+	help
+	  Say Y or M if you want to add support for Wolfson WM8960
+	  codec attached to Raspberry Pi I2S interface.

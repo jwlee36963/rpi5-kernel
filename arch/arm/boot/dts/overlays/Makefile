@@ -359,7 +359,7 @@ dtbo-$(CONFIG_ARCH_BCM2835) += \
 	waveshare-can-fd-hat-mode-b.dtbo \
 	wifimac.dtbo \
 	wittypi.dtbo \
-	wm8960-soundcard.dtbo \
+	rpi5-wm8960.dtbo \
 	ws2812-pio.dtbo
 
 targets += dtbs dtbs_install

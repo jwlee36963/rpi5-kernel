@@ -1,0 +1,26 @@
+
+KERNEL=kernel_2712 && echo $KERNEL
+
+# 生成.config
+make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bcm2712_defconfig #使用出厂默认配置,在此基础上才可进行menuconfig
+
+# menuconfig中选择对应的模块(必要)
+make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- menuconfig
+
+# 全编
+make -j64 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- Image modules dtbs
+
+# 挂载分区
+sudo mount /dev/sda1 mnt/boot && sudo mount /dev/sda2 mnt/root #需要在当前路径下新建mnt等目录
+
+# 安装MODULES
+sudo env PATH=$PATH make -j64 ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- INSTALL_MOD_PATH=mnt/root modules_install
+
+sudo cp mnt/boot/$KERNEL.img mnt/boot/$KERNEL-backup.img # 备份旧内核
+sudo cp arch/arm64/boot/Image mnt/boot/$KERNEL.img # 拷贝新内核
+sudo cp arch/arm64/boot/dts/broadcom/*.dtb mnt/boot/ # 拷贝设备树文件
+sudo cp arch/arm64/boot/dts/overlays/*.dtb* mnt/boot/overlays/ # 拷贝设备树覆盖文件
+sudo cp arch/arm64/boot/dts/overlays/README mnt/boot/overlays/ # 拷贝设备树覆盖文件说明
+
+sudo umount mnt/boot && sudo umount mnt/root # 卸载分区
+
